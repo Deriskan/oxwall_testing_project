@@ -6,8 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 class SignInWindow(BasePage):
     def input_username(self, username):
-        username_field = self.wait.until(EC.visibility_of_element_located(SignInPageLocators.USERNAME_FIELD),
-                                         message="No visible username field")
+        username_field = self.find_visible_element(SignInPageLocators.USERNAME_FIELD)
         username_field.clear()
         username_field.send_keys(username)
 

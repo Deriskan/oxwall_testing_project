@@ -1,9 +1,11 @@
 from custom_wait_condition import find_N_elements_located
 from pages.base_page import BasePage
+from pages.internal_pages.internal_page import InternalPage
 from pages.locators import DashboardPageLocators
 
 
-class DashboardPage(BasePage):
+class DashboardPage(InternalPage):
+
     def wait_new_post_appear(self, number_of_posts):
         # posts = driver.find_elements(By.CLASS_NAME,  "ow_newsfeed_body")
         posts = self.wait.until(find_N_elements_located(DashboardPageLocators.POST_BLOCK, number_of_posts + 1),
