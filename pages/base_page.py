@@ -29,3 +29,8 @@ class BasePage:
         el = self.wait.until(EC.visibility_of_element_located(locator),
                              message=f"No visible element with locator='{locator}'")
         return el
+
+    def find_all_visible_elements(self, locator):
+        els = self.wait.until(EC.visibility_of_all_elements_located(locator),
+                             message=f"Not all elements visible with locator={locator}")
+        return els

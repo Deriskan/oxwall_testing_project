@@ -5,6 +5,8 @@ from pages.locators import DashboardPageLocators
 
 
 class DashboardPage(InternalPage):
+    def get_posts(self):
+        return self.find_all_visible_elements(DashboardPageLocators.POST_BLOCK)
 
     def wait_new_post_appear(self, number_of_posts):
         # posts = driver.find_elements(By.CLASS_NAME,  "ow_newsfeed_body")
