@@ -4,6 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from custom_wait_condition import find_N_elements_located
+from pages.locators import DashboardPageLocators
 
 
 class OxwallHelper:
@@ -13,7 +14,7 @@ class OxwallHelper:
     def wait_new_post_appear(self, number_of_posts):
         wait = WebDriverWait(self.driver, 5)
         # posts = driver.find_elements(By.CLASS_NAME,  "ow_newsfeed_body")
-        posts = wait.until(find_N_elements_located((By.CLASS_NAME, "ow_newsfeed_body"), number_of_posts + 1),
+        posts = wait.until(find_N_elements_located(DashboardPageLocators.POST_BLOCK, number_of_posts + 1),
                            message="New post doesn't appear")
 
     def create_new_post(self, post_text):
@@ -26,7 +27,7 @@ class OxwallHelper:
 
     def count_posts(self):
         # Count current posts
-        posts = self.driver.find_elements(By.CLASS_NAME, "ow_newsfeed_body")
+        posts = self.driver.find_elements(*POST_BLOCK)
         number_of_posts = len(posts)
         return number_of_posts
 

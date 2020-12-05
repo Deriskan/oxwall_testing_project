@@ -4,12 +4,12 @@ from selenium import webdriver
 from oxwall_helper import OxwallHelper
 
 
-@pytest.fixture()
+@pytest.fixture(scope="session")
 def driver():
     driver = webdriver.Chrome()
     driver.get("https://demo.oxwall.com/")
     yield driver
-    driver.close()
+    driver.quit()
 
 
 @pytest.fixture()
