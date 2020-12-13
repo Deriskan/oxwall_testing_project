@@ -1,9 +1,14 @@
 import pytest
 import json
+import os.path
+from conftest import PROJECT_DIR
+from data.random_string import random_string
 from pages.internal_pages.dashbord_page import DashboardPage
 
-with open("data/post.json", encoding="utf8") as f:
+with open(os.path.join(PROJECT_DIR, "data", "post.json"), encoding="utf8") as f:
     post_text_list = json.load(f)
+
+post_text_list.append(random_string(min_len=3, max_len=255))
 
 
 @pytest.mark.parametrize("post_text", post_text_list)
@@ -15,7 +20,7 @@ def test_create_new_post(driver, logged_user, post_text):
     dashboard_page.wait_new_post_appear(number_of_posts)
     first_post = dashboard_page.posts[0]
     assert first_post.text == post_text
-    assert first_post.user.lower() == logged_user
+    assert first_post.user == logged_user.real_name
     assert first_post.time == "within 1 minute"
 
     # first_post.delete()
