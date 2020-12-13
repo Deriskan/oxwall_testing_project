@@ -5,19 +5,30 @@ from selenium.webdriver.support import expected_conditions as EC
 
 
 class SignInWindow(BasePage):
+    # username_field = Find(*SignInPageLocators.USERNAME_FIELD)
+
+    @property
+    def username_field(self):
+        return self.find_visible_element(SignInPageLocators.USERNAME_FIELD)
+
+    @property
+    def password_field(self):
+        return self.find_visible_element(SignInPageLocators.PASSWORD_FIELD)
+
+    @property
+    def sign_in(self):
+        return self.find_visible_element(SignInPageLocators.SIGN_IN_BUTTON)
+
     def input_username(self, username):
-        username_field = self.find_visible_element(SignInPageLocators.USERNAME_FIELD)
-        username_field.clear()
-        username_field.send_keys(username)
+        self.username_field.clear()
+        self.username_field.send_keys(username)
 
     def input_password(self, password):
-        password_field = self.driver.find_element(*SignInPageLocators.PASSWORD_FIELD)
-        password_field.clear()
-        password_field.send_keys(password)
+        self.password_field.clear()
+        self.password_field.send_keys(password)
 
     def sign_in_click(self):
-        sign_in_button = self.driver.find_element(*SignInPageLocators.SIGN_IN_BUTTON)
-        sign_in_button.click()
+        self.sign_in.click()
         # TODO: Explicitly wait:
         time.sleep(2)
 

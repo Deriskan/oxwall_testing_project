@@ -1,12 +1,22 @@
 from custom_wait_condition import find_N_elements_located
 from pages.base_page import BasePage
+from pages.block_objects.post_block import PostBlock
 from pages.internal_pages.internal_page import InternalPage
 from pages.locators import DashboardPageLocators
 
 
 class DashboardPage(InternalPage):
-    def get_posts(self):
-        return self.find_all_visible_elements(DashboardPageLocators.POST_BLOCK)
+    @property
+    def posts(self):
+        return [PostBlock(el, self.driver) for el in self.find_all_visible_elements(DashboardPageLocators.POST_BLOCK)]
+
+    @property
+    def post_textfield(self):
+        return self.find_element(DashboardPageLocators.POST_TEXTFIELD)
+
+    @property
+    def send_button(self):
+        return self.find_visible_element(DashboardPageLocators.SEND_BUTTON)
 
     def wait_new_post_appear(self, number_of_posts):
         # posts = driver.find_elements(By.CLASS_NAME,  "ow_newsfeed_body")
@@ -15,14 +25,11 @@ class DashboardPage(InternalPage):
 
     def create_new_post(self, post_text):
         # Type text of new post
-        new_post_textfield = self.driver.find_element(*DashboardPageLocators.POST_TEXTFIELD)
-        new_post_textfield.send_keys(post_text)
+        self.post_textfield.send_keys(post_text)
         # Submit new post
-        send_button = self.driver.find_element(*DashboardPageLocators.SEND_BUTTON)
-        send_button.click()
+        self.send_button.click()
 
     def count_posts(self):
         # Count current posts
-        posts = self.driver.find_elements(*DashboardPageLocators.POST_BLOCK)
-        number_of_posts = len(posts)
+        number_of_posts = len(self.posts)
         return number_of_posts

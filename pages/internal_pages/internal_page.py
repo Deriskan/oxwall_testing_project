@@ -3,7 +3,8 @@ from pages.locators import InternalPageLocators
 
 
 class InternalPage(BasePage):
-    def find_active_menu(self):
+    @property
+    def active_menu(self):
         return self.find_element(InternalPageLocators.ACTIVE_MENU)
 
     def sign_in_menu_click(self):
