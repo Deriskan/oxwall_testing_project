@@ -4,6 +4,7 @@ import os.path
 from selenium import webdriver
 
 from data.random_string import random_string
+from db.connector import OxwallDB
 from oxwall_helper import OxwallHelper
 from pages.internal_pages.login_page import SignInWindow
 from pages.internal_pages.main_page import MainPage
@@ -39,14 +40,30 @@ def logged_user(driver):
     # TODO: sign out
 
 
+@pytest.fixture(scope="session")
+def db():
+    db_config = {
+        "host": "localhost",
+        "user": "root",
+        "password": "mysql",
+        "database": "oxwall1"
+    }
+    db = OxwallDB(**db_config)
+    yield db
+    db.close()
+
+
 with open(os.path.join(PROJECT_DIR, "data", "user_data_login.json"), encoding="utf8") as f:
     user_list = json.load(f)
 
 
 @pytest.fixture(params=user_list, ids=[str(u) for u in user_list])
-def user(request):
+def user(request, db):
     user_data = request.param
-    return User(**user_data)
+    user = User(**user_data)
+    db.create_user(user)
+    yield user
+    db.delete_user(user)
 
 
 with open(os.path.join(PROJECT_DIR, "data", "post.json"), encoding="utf8") as f:

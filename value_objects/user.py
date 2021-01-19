@@ -16,3 +16,17 @@ class User:
 
     def __repr__(self):
         return f"{self.__class__}(username={self.username}, password={self.password}, real_name={self.real_name})"
+
+    # def __lt__(self, other):
+    #     return self.birthday < other.birthday
+
+    def __eq__(self, other):
+        if self.email != "":
+            return self.username == other.username and self.real_name == other.real_name and self.email == self.email
+        return self.username == other.username and self.real_name == other.real_name
+
+
+if __name__ == "__main__":
+    u1 = User(username="A", birthday="1986-01-16")
+    u2 = User(username="A")
+    print(str(u1.birthday))

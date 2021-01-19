@@ -13,3 +13,4 @@ def test_positive_login(driver, user):
     sign_in_page.sign_in_click()
     dashboard_page = DashboardPage(driver)
     assert dashboard_page.active_menu.text == "DASHBOARD"
+    assert dashboard_page.active_user == user

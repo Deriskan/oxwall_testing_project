@@ -4,6 +4,7 @@ from selenium.webdriver.common.by import By
 class InternalPageLocators:
     ACTIVE_MENU = (By.CSS_SELECTOR, ".ow_menu_wrap .active")
     SIGN_IN_MENU = (By.CSS_SELECTOR, ".ow_signin_label")
+    USER_MENU = (By.CSS_SELECTOR, '.ow_console_dropdown_hover a')
 
 
 class MainPageLocators:
