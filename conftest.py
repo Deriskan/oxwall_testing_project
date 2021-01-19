@@ -13,11 +13,35 @@ from value_objects.user import User
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
+def pytest_addoption(parser):
+    parser.addoption(
+        "--config", action="store", default="config.json", help="project config file name"
+    )
+    # parser.addoption(
+    #     "--browser", action="store", default="Chrome", help="driver"
+    # )
+
+
+@pytest.fixture(scope="session")
+def config(request):
+    with open(os.path.join(PROJECT_DIR, request.config.getoption("--config")), encoding="utf8") as f:
+        return json.load(f)
+
+
 @pytest.fixture()
-def driver(selenium):
-    # driver = webdriver.Chrome()
+def driver(config, selenium, request):
+    # option = request.config.getoption("--browser")
+    # if option.lower() == "chrome":
+    #     driver = webdriver.Chrome()
+    # elif option.lower() == "firefox":
+    #     driver = webdriver.Firefox()
+    # elif option.lower() == "edge":
+    #     driver = webdriver.Edge()
+    # else:  #TODO
+    #     raise ValueError("Not correct option for browser")
     driver = selenium
-    driver.get("http://127.0.0.1/oxwall/")
+    # driver.get(config["base_url"])
+    driver.get(request.config.getoption("--base-url"))
     yield driver
     driver.quit()
 
@@ -28,8 +52,14 @@ def app(driver):
 
 
 @pytest.fixture()
-def logged_user(driver):
-    user = User(username="admin", password="pass", real_name="Admin")
+def admin(config):
+    user = User(**config["admin"])
+    return user
+
+
+@pytest.fixture()
+def logged_user(driver, admin):
+    user = admin
     main_page = MainPage(driver)
     main_page.sign_in_menu_click()
     sign_in_page = SignInWindow(driver)
@@ -41,14 +71,8 @@ def logged_user(driver):
 
 
 @pytest.fixture(scope="session")
-def db():
-    db_config = {
-        "host": "localhost",
-        "user": "root",
-        "password": "mysql",
-        "database": "oxwall1"
-    }
-    db = OxwallDB(**db_config)
+def db(config):
+    db = OxwallDB(**config["db"])
     yield db
     db.close()
 

@@ -11,6 +11,8 @@ with open(os.path.join(PROJECT_DIR, "data", "post.json"), encoding="utf8") as f:
 post_text_list.extend([random_string(min_len=3, max_len=255) for _ in range(3)])
 
 
+@pytest.mark.smoke
+@pytest.mark.nondestructive
 @pytest.mark.parametrize("post_text", post_text_list)
 def test_create_new_post(driver, logged_user, post_text, db):
     dashboard_page = DashboardPage(driver)

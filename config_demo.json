@@ -1,0 +1,17 @@
+{
+  "base_url": "http://demo.oxwall.com",
+
+  "db": {
+    "host": "localhost",
+    "user": "root",
+    "password": "mysql",
+    "database": "oxwall1"
+  },
+
+  "admin": {
+    "username": "demo",
+    "password": "demo",
+    "email": "admin@127.0.0.1",
+    "real_name": "Demo"
+  }
+}
