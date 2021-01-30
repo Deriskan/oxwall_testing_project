@@ -1,8 +1,13 @@
+import allure
+
 from pages.internal_pages.dashbord_page import DashboardPage
 from pages.internal_pages.login_page import SignInWindow
 from pages.internal_pages.main_page import MainPage
 
 
+@allure.title("Positive login")
+@allure.feature("Login feature")
+@allure.story("Login with user")
 def test_positive_login(driver, user):
     main_page = MainPage(driver)
     main_page.sign_in_menu_click()

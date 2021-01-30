@@ -1,7 +1,14 @@
 import json
+
+import allure
 import pytest
 import os.path
 from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.firefox import GeckoDriverManager
+from webdriver_manager.microsoft import EdgeChromiumDriverManager, IEDriverManager
+from webdriver_manager.opera import OperaDriverManager
+from webdriver_manager.utils import ChromeType
 
 from data.random_string import random_string
 from db.connector import OxwallDB
@@ -18,9 +25,9 @@ def pytest_addoption(parser):
     parser.addoption(
         "--config", action="store", default="config.json", help="project config file name"
     )
-    # parser.addoption(
-    #     "--browser", action="store", default="Chrome", help="driver"
-    # )
+    parser.addoption(
+        "--browser", action="store", default="Chrome", help="driver"
+    )
 
 
 @pytest.fixture(scope="session")
@@ -30,17 +37,23 @@ def config(request):
 
 
 @pytest.fixture()
-def driver(config, selenium, request):
-    # option = request.config.getoption("--browser")
-    # if option.lower() == "chrome":
-    #     driver = webdriver.Chrome()
-    # elif option.lower() == "firefox":
-    #     driver = webdriver.Firefox()
-    # elif option.lower() == "edge":
-    #     driver = webdriver.Edge()
-    # else:  #TODO
-    #     raise ValueError("Not correct option for browser")
-    driver = selenium
+def driver(config, request):
+    option = request.config.getoption("--browser")
+    if option.lower() == "chrome":
+        driver = webdriver.Chrome(ChromeDriverManager().install())
+    elif option.lower() == "chromium":
+        driver = webdriver.Chrome(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install())
+    elif option.lower() == "firefox":
+        driver = webdriver.Firefox(executable_path=GeckoDriverManager().install())
+    elif option.lower() == "edge":
+        driver = webdriver.Edge(EdgeChromiumDriverManager().install())
+    elif option.lower() == "ie":
+        driver = webdriver.Ie(IEDriverManager().install())
+    elif option.lower() == "opera":
+        driver = webdriver.Opera(executable_path=OperaDriverManager().install())  # TODO add options=options, see docs
+    else:
+        raise ValueError("Not correct option for browser")
+    # driver = selenium
     # driver.get(config["base_url"])
     driver.get(request.config.getoption("--base-url"))
     yield driver
@@ -73,6 +86,7 @@ def admin(config):
     return user
 
 
+@allure.step("Given I as a logged user")
 @pytest.fixture()
 def logged_user(driver, admin):
     user = admin

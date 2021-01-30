@@ -1,8 +1,12 @@
+allure-pytest==2.8.31
+allure-python-commons==2.8.31
 atomicwrites==1.4.0
 attrs==20.3.0
 certifi==2020.12.5
 chardet==3.0.4
 colorama==0.4.4
+configparser==5.0.1
+crayons==0.4.0
 glob2==0.7
 idna==2.10
 iniconfig==1.1.1
@@ -28,3 +32,4 @@ six==1.15.0
 tenacity==6.2.0
 toml==0.10.2
 urllib3==1.26.2
+webdriver-manager==3.3.0
