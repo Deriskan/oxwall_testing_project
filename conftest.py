@@ -6,6 +6,7 @@ from selenium import webdriver
 from data.random_string import random_string
 from db.connector import OxwallDB
 from oxwall_helper import OxwallHelper
+from pages.internal_pages.dashbord_page import DashboardPage
 from pages.internal_pages.login_page import SignInWindow
 from pages.internal_pages.main_page import MainPage
 from value_objects.user import User
@@ -49,6 +50,21 @@ def driver(config, selenium, request):
 @pytest.fixture()
 def app(driver):
     return OxwallHelper(driver)
+
+
+@pytest.fixture()
+def main_page(driver):
+    return MainPage(driver)
+
+
+@pytest.fixture()
+def login_page(driver):
+    return SignInWindow(driver)
+
+
+@pytest.fixture()
+def dashboard_page(driver):
+    return DashboardPage(driver)
 
 
 @pytest.fixture()
